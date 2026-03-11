@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pratiksha Panchbhai · code & canvas</title>
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Google Fonts: Inter + Space Grotesk for modern feel -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300..700&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #ffffff;      /* pure white background */
+      font-family: "Inter", sans-serif;
+      color: #1e1e2f;
+      line-height: 1.5;
+      scroll-behavior: smooth;
+    }
+
+    /* ----- rainbow text animation (gradient + move) ----- */
+    .rainbow-text {
+      background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+      background-size: 300% 300%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbowMove 8s ease infinite;
+      font-weight: 700;
+      display: inline-block;
+    }
+
+    @keyframes rainbowMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* section titles also get rainbow (but subtle) */
+    h2.rainbow-section {
+      background: linear-gradient(145deg, #f4732f, #d32e8a, #4756e9, #40c9ff);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbowMove 10s ease infinite;
+      font-size: 2.1rem;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----- HEADER (sticky, glass, simple) ----- */
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.02);
+      padding: 16px 0;
+      z-index: 10;
+      border-bottom: 1px solid rgba(0,0,0,0.02);
+    }
+
+    .header-flex {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo-name {
+      font-size: 1.9rem;
+      font-weight: 650;
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: -0.5px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.2rem;
+      font-weight: 500;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #2c2c3a;
+      font-size: 1.1rem;
+      transition: 0.2s;
+      border-bottom: 2px solid transparent;
+      padding-bottom: 4px;
+    }
+    .nav-links a:hover {
+      border-bottom-color: #d32e8a;
+      color: #111;
+    }
+
+    /* ----- hero / intro (no photo) ----- */
+    .hero {
+      padding: 5rem 0 2.5rem;
+    }
+    .hero h1 {
+      font-size: 3.5rem;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+    .hero .highlight {
+      font-size: 1.7rem;
+      font-weight: 400;
+      color: #3e3e4d;
+      max-width: 750px;
+      border-left: 5px solid;
+      border-image: linear-gradient(180deg, #ff7e5f, #feb47b) 1;
+      padding-left: 1.8rem;
+      margin-top: 1rem;
+    }
+    .hero .highlight i {
+      color: #d32e8a;
+      margin-right: 8px;
+    }
+
+    /* college & branch badge */
+    .edu-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #f5f5fa;
+      border-radius: 60px;
+      padding: 0.7rem 1.8rem;
+      margin: 2rem 0 1.5rem;
+      font-weight: 500;
+      border: 1px solid #ececf0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+    }
+
+    /* section spacing */
+    section {
+      padding: 4rem 0;
+    }
+
+    /* skill cards grid */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+    }
+    .skill-item {
+      background: #f8f9ff;
+      border: 1px solid #f0f0f8;
+      border-radius: 40px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 550;
+      font-size: 1.1rem;
+      transition: all 0.25s;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.01);
+      backdrop-filter: blur(4px);
+    }
+    .skill-item i {
+      font-size: 1.5rem;
+      min-width: 28px;
+      color: #3c3c5a;
+    }
+    .skill-item:hover {
+      transform: translateY(-5px) scale(1.02);
+      background: #ffffff;
+      border-color: #c5b3ff;
+      box-shadow: 0 15px 25px -10px rgba(100, 70, 200, 0.2);
+    }
+
+    .skill-category-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1rem 0;
+      background: linear-gradient(130deg, #2a2a40, #4a4a6a);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* project cards */
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    .project-card {
+      background: #fbfbfe;
+      border-radius: 28px;
+      padding: 1.8rem 1.5rem;
+      border: 1px solid #f0eefb;
+      transition: all 0.3s cubic-bezier(0.2,0,0,1);
+      box-shadow: 0 12px 22px -12px rgba(0,0,0,0.04);
+    }
+    .project-card:hover {
+      border-color: #e2d5ff;
+      transform: scale(1.02) translateY(-6px);
+      background: white;
+      box-shadow: 0 22px 35px -14px rgba(128, 90, 213, 0.2);
+    }
+    .project-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #43439c;
+    }
+    .project-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.7rem;
+    }
+    .project-desc {
+      color: #3c3c4c;
+      margin: 0.7rem 0 1.4rem;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tag {
+      background: #eaeaf5;
+      padding: 0.3rem 1rem;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #2d2d3a;
+    }
+
+    /* contact card (simple, email) */
+    .contact-card {
+      background: linear-gradient(115deg, #fafaff, #ffffff);
+      border-radius: 48px;
+      padding: 2.8rem 2rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 2rem auto;
+      border: 1px solid #e9e9fd;
+      box-shadow: 0 22px 35px -18px #b9b9df;
+    }
+    .contact-email {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      background: #1e1e2f;
+      color: white;
+      padding: 1.2rem 2.8rem;
+      border-radius: 60px;
+      font-size: 1.4rem;
+      font-weight: 500;
+      text-decoration: none;
+      margin-top: 1rem;
+      transition: 0.2s;
+      border: 2px solid transparent;
+    }
+    .contact-email i {
+      font-size: 1.8rem;
+      color: #ffd966;
+    }
+    .contact-email:hover {
+      background: #11111e;
+      border-color: #b56aff;
+      transform: scale(1.02);
+    }
+
+    /* footer */
+    footer {
+      background: #f8f8ff;
+      padding: 2.5rem 0;
+      margin-top: 2rem;
+      border-top: 1px solid #e2e2f0;
+      text-align: center;
+      font-size: 1rem;
+      color: #4f4f62;
+    }
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+    .footer-heart {
+      color: #d9367e;
+    }
+    .footer-email {
+      color: #32324a;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 2px dotted #c1b2f0;
+    }
+
+    /* animations */
+    .fadeup {
+      animation: fadeUp 1s ease both;
+    }
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* no photo, all good */
+    hr {
+      border: none;
+      height: 2px;
+      background: linear-gradient(90deg, #ffb3ba, #ffdfba, #ffffba, #baffc9, #a0e7ff);
+      width: 40%;
+      margin: 1rem auto;
+    }
+
+    /* responsiveness */
+    @media (max-width: 600px) {
+      .header-flex {
+        flex-direction: column;
+        gap: 10px;
+      }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      .nav-links {
+        gap: 1.2rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-flex">
+      <div class="logo-name rainbow-text">Pratiksha Panchbhai</div>
+      <div class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#skills">Skills</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME / hero section (no photo) -->
+    <section id="home">
+      <div class="container hero fadeup">
+        <h1>
+          <span class="rainbow-text">code, create,</span><br>
+          <span style="color:#1e1e2f;">communicate.</span>
+        </h1>
+        <div class="edu-badge">
+          <i class="fas fa-graduation-cap" style="color:#7c4dff;"></i>
+          <span><strong>B.Tech CSE</strong> · Anjuman College of Engineering, Nagpur</span>
+        </div>
+        <p class="highlight">
+          <i class="fas fa-pen-fancy"></i>  blending technical depth (Python, DSA, C, C++, Java) with creative flow — content writing, video editing, Canva.
+        </p>
+        <hr>
+      </div>
+    </section>
+
+    <!-- SKILLS section (technical + non technical) -->
+    <section id="skills">
+      <div class="container">
+        <h2 class="rainbow-section"><i class="fas fa-code"></i> technical toolkit</h2>
+        <div class="skills-grid">
+          <!-- python -->
+          <div class="skill-item"><i class="fab fa-python"></i> Python</div>
+          <!-- DSA (icon) -->
+          <div class="skill-item"><i class="fas fa-diagram-project"></i> DSA</div>
+          <!-- C -->
+          <div class="skill-item"><i class="fas fa-c"></i> C</div>
+          <!-- C++ -->
+          <div class="skill-item"><i class="fas fa-code"></i> C++</div>
+          <!-- Java -->
+          <div class="skill-item"><i class="fab fa-java"></i> Java</div>
+          <!-- and etc (extra) -->
+          <div class="skill-item"><i class="fas fa-database"></i> SQL</div>
+          <div class="skill-item"><i class="fas fa-cloud"></i> Git</div>
+        </div>
+
+        <h2 class="skill-category-title"><i class="fas fa-palette"></i>  non‑technical superpowers</h2>
+        <div class="skills-grid">
+          <div class="skill-item"><i class="fas fa-feather"></i> Content writing</div>
+          <div class="skill-item"><i class="fas fa-film"></i> Video editing</div>
+          <div class="skill-item"><i class="fas fa-paint-brush"></i> Canva</div>
+          <div class="skill-item"><i class="fas fa-microphone"></i> Storytelling</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROJECTS (real-time, creative, based on skills) -->
+    <section id="projects">
+      <div class="container">
+        <h2 class="rainbow-section"><i class="fas fa-rocket"></i> featured work</h2>
+        <div class="project-grid">
+          <!-- project 1: algo visualizer (python + dsa) -->
+          <div class="project-card">
+            <div class="project-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="project-title">AlgoVision</div>
+            <p class="project-desc">Interactive DSA visualizer for sorting & graph algorithms. Built with Python & Tkinter. Used in college workshops.</p>
+            <div class="project-tags">
+              <span class="tag">Python</span>
+              <span class="tag">DSA</span>
+              <span class="tag">GUI</span>
+            </div>
+          </div>
+          <!-- project 2: content & editing portfolio (non-tech) -->
+          <div class="project-card">
+            <div class="project-icon"><i class="fas fa-video"></i></div>
+            <div class="project-title">narrative cuts</div>
+            <p class="project-desc">Short film editing & Canva design for institute fests. Content scripts, social media creatives, and aftermovies.</p>
+            <div class="project-tags">
+              <span class="tag">video editing</span>
+              <span class="tag">Canva</span>
+              <span class="tag">scripting</span>
+            </div>
+          </div>
+          <!-- project 3: code judge (C++/Java) -->
+          <div class="project-card">
+            <div class="project-icon"><i class="fas fa-gavel"></i></div>
+            <div class="project-title">code courtroom</div>
+            <p class="project-desc">Online judge prototype for coding challenges. Supports C++ and Java, with basic DSA problem sets.</p>
+            <div class="project-tags">
+              <span class="tag">C++</span>
+              <span class="tag">Java</span>
+              <span class="tag">Spring Boot</span>
+            </div>
+          </div>
+        </div>
+        <!-- one extra "real-time" note: based on previous data (mini project) -->
+        <p style="text-align: center; margin-top: 2.2rem; font-style: italic; color: #6a6a85;">
+          <i class="fas fa-rainbow rainbow-text"></i> plus technical blogs & reels — because code meets story.
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTACT (only email) -->
+    <section id="contact">
+      <div class="container">
+        <div class="contact-card fadeup">
+          <i class="fas fa-paper-plane" style="font-size: 3rem; color: #5d4a9a; opacity: 0.8;"></i>
+          <h2 style="font-size: 2.2rem; margin: 1rem 0 0.5rem;" class="rainbow-text">let’s connect</h2>
+          <p style="font-size: 1.2rem; margin-bottom: 1.8rem;">drop a line, I’ll reply like a rainbow after rain 🌈</p>
+          <a href="mailto:pratiksha357@gmail.com" class="contact-email">
+            <i class="fas fa-envelope"></i> pratiksha357@gmail.com
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <span>© 2025 Pratiksha Panchbhai · </span>
+        <span class="footer-heart"><i class="fas fa-heart"></i>  </span>
+        <span> B.Tech CSE, Anjuman College Nagpur</span>
+      </div>
+      <div>
+        <a href="mailto:pratiksha357@gmail.com" class="footer-email"><i class="fas fa-envelope"></i> pratiksha357@gmail.com</a>
+      </div>
+      <div style="font-size: 0.95rem; display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;">
+        <span><i class="fas fa-terminal"></i> Python · DSA · C · C++ · Java</span>
+        <span><i class="fas fa-pen"></i> writing · edit · Canva</span>
+      </div>
+      <div style="margin-top: 0.8rem;">
+        <span class="rainbow-text">#creative developer</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- small script to update year (real-time) -->
+  <script>
+    (function() {
+      const yearSpan = document.querySelector('footer .footer-content div:first-child');
+      if (yearSpan) {
+        const currentYear = new Date().getFullYear();
+        yearSpan.innerHTML = yearSpan.innerHTML.replace('2025', currentYear);
+      }
+    })();
+  </script>
+  <!-- no photo used anywhere, only icons and text -->
+</body>
+</html>
